@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const CardPoke = ({ name, url }) => {
+export const CardPoke = ({ name }) => {
   // Puedes realizar una nueva solicitud para obtener detalles adicionales del Pokémon si es necesario
   // Por simplicidad, aquí solo mostramos el nombre del Pokémon
   return (

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { CardPoke } from './CardPoke';
 
@@ -19,7 +19,27 @@ export const fetchPokes = async () => {
 };
 
 export const ContainerPokes = () => {
-  const { isLoading, data, error, isError } = useQuery('pokes', fetchPokes);
+  const { isLoading, data, error, isError, refetch } = useQuery(
+    'pokes',
+    fetchPokes,
+    {
+      refetchOnWindowFocus: true, // Habilitar la recarga automática al recuperar el enfoque
+    }
+  );
+
+  const [shuffledPokemon, setShuffledPokemon] = useState([]);
+
+  useEffect(() => {
+    // Reorganizar la lista aleatoriamente solo al montar el componente
+    if (data) {
+      const shuffled = [...data].sort(() => Math.random() - 0.5);
+      setShuffledPokemon(shuffled);
+    }
+  }, [data]);
+
+  const handleRefresh = () => {
+    refetch({ queryKey: 'pokes' }); // Manualmente refrescar la lista de Pokémon
+  };
 
   if (isLoading) {
     return <div>Cargando...</div>;
@@ -29,17 +49,15 @@ export const ContainerPokes = () => {
     return <div>Error al cargar los datos</div>;
   }
 
-  // Reorganizar la lista aleatoriamente
-  const shuffledPokemon = data ? [...data].sort(() => Math.random() - 0.5) : [];
-
   return (
     <div>
       <h1>Lista de Pokémon</h1>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {shuffledPokemon.map((pokemon) => (
-          <CardPoke key={pokemon.name} name={pokemon.name} url={pokemon.url} />
+          <CardPoke key={pokemon.name} name={pokemon.name} />
         ))}
-      </div>
+      </div>{' '}
+      <button onClick={handleRefresh}>Actualizar Pokémon</button>
     </div>
   );
 };
