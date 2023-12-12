@@ -1,8 +1,20 @@
+import axios from 'axios';
 import React from 'react';
+import { useQuery } from 'react-query';
 
-export const CardPoke = ({ name }) => {
-  // Puedes realizar una nueva solicitud para obtener detalles adicionales del Pokémon si es necesario
-  // Por simplicidad, aquí solo mostramos el nombre del Pokémon
+const fetchPoke = async (url) => {
+  const response = await axios.get(url);
+  return response.data;
+};
+export const CardPoke = ({ name, urlPoke }) => {
+  // Nueva función que obtiene un Pokemon dado una URL
+
+  const { isLoading, data, error, isError } = useQuery(['poke', urlPoke], () =>
+    fetchPoke(urlPoke)
+  );
+
+  console.log(data);
+
   return (
     <div
       key={name}
@@ -13,7 +25,30 @@ export const CardPoke = ({ name }) => {
         borderRadius: '5px',
       }}
     >
-      <p>{name}</p>
+      {isLoading && <p>Cargando...</p>}
+      {isError && <p>Error al cargar los datos</p>}
+      {data && (
+        <div>
+          <div>
+            <img
+              style={{
+                height: '150px',
+              }}
+              src={data.sprites.other.dream_world.front_default}
+            />
+          </div>
+          <p>Nombre: {data.name}</p>
+          <p>Experiencia Base: {data.base_experience}</p>
+          <p>Altura: {data.height}</p>
+          <p>Peso: {data.base_experience}</p>
+          <p>Habilidades:</p>
+          <ul>
+            {data.abilities.map((ability) => (
+              <li key={ability.ability.name}>{ability.ability.name}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
