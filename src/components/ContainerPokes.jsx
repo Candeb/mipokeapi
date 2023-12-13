@@ -46,7 +46,7 @@ export const ContainerPokes = () => {
         <div>Error al obtener los datos: {error.message}</div>
       ) : (
         <div>
-          <h1>Pokemones disponibles</h1>
+          <h1 style={{ textAlign: 'center' }}>Pokemones disponibles</h1>
           <div
             style={{
               display: 'flex',
