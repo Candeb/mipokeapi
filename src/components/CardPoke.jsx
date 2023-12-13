@@ -48,7 +48,7 @@ export const CardPoke = ({ name, urlPoke }) => {
           <img
             style={{ height: '100px', width: '100%' }}
             src={data.sprites.other.dream_world.front_default}
-            alt={`${data.name} sprite`}
+            alt={`${data.name}`}
           />
           <IonCardHeader>
             <IonCardTitle
