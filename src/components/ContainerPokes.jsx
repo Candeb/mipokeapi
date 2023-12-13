@@ -30,6 +30,10 @@ export const ContainerPokes = () => {
     }
   }, [data]);
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div>
       {isLoading ? (
@@ -73,10 +77,12 @@ export const ContainerPokes = () => {
           gap: '10px',
         }}
       >
-        {' '}
         <IonButton
           fill="outline"
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          onClick={() => {
+            setPage((prev) => Math.max(prev - 1, 1));
+            scrollToTop();
+          }}
           disabled={page === 1}
         >
           <IoMdArrowBack />
@@ -87,6 +93,7 @@ export const ContainerPokes = () => {
           onClick={() => {
             if (!isPreviousData && data?.next) {
               setPage((prev) => prev + 1);
+              scrollToTop();
             }
           }}
           disabled={isPreviousData || !data?.next}

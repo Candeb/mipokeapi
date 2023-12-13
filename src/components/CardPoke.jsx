@@ -60,8 +60,8 @@ export const CardPoke = ({ name, urlPoke }) => {
           </IonCardHeader>
           <IonCardContent>
             <p>Experiencia: {data.base_experience}</p>
-            <p> Altura: {data.height / 10} m</p>
-            <p> Peso: {data.weight / 10} kg</p>
+            <p> Altura: {data.height} dm</p>
+            <p> Peso: {data.weight} hg</p>
             <p>Habilidades:</p>
             <ul style={{ margin: '5px', paddingInlineStart: '20px' }}>
               {data.abilities.map((ability) => (
