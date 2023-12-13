@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { CardPoke } from './CardPoke';
+import { IonSpinner, IonButton } from '@ionic/react';
+import { IoMdArrowBack, IoMdArrowForward } from 'react-icons/io';
 
 export const fetchPokes = async (page = 1) => {
   const url = `https://pokeapi.co/api/v2/pokemon/?offset=${
@@ -31,13 +33,28 @@ export const ContainerPokes = () => {
   return (
     <div>
       {isLoading ? (
-        <div>Cargando...</div>
+        <IonSpinner
+          name="circles"
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+          }}
+        />
       ) : isError ? (
-        <div>Error al cargar los datos: {error.message}</div>
+        <div>Error al obtener los datos: {error.message}</div>
       ) : (
         <div>
-          <h1>Lista de Pokémon</h1>
-          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+          <h1>Pokemones disponibles</h1>
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'stretch',
+              justifyContent: 'center',
+            }}
+          >
             {shuffledPokemon.map((pokemon) => (
               <CardPoke
                 key={pokemon.name}
@@ -48,24 +65,46 @@ export const ContainerPokes = () => {
           </div>
         </div>
       )}
-      <span>Página actual: {page}</span>
-      <button
-        onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-        disabled={page === 1}
-      >
-        Página anterior
-      </button>{' '}
-      <button
-        onClick={() => {
-          if (!isPreviousData && data?.next) {
-            setPage((prev) => prev + 1);
-          }
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '10px',
         }}
-        disabled={isPreviousData || !data?.next}
       >
-        Página siguiente
-      </button>
-      {isFetching ? <span> Cargando...</span> : null}{' '}
+        {' '}
+        <IonButton
+          fill="outline"
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={page === 1}
+        >
+          <IoMdArrowBack />
+        </IonButton>{' '}
+        <IonButton fill="solid">{page}</IonButton>
+        <IonButton
+          fill="outline"
+          onClick={() => {
+            if (!isPreviousData && data?.next) {
+              setPage((prev) => prev + 1);
+            }
+          }}
+          disabled={isPreviousData || !data?.next}
+        >
+          <IoMdArrowForward />
+        </IonButton>
+      </div>
+      {isFetching ? (
+        <IonSpinner
+          name="circles"
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+          }}
+        />
+      ) : null}{' '}
     </div>
   );
 };
